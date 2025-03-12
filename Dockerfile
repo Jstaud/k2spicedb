@@ -1,26 +1,18 @@
-# Use the official Python image from the Docker Hub
+# Use a lightweight Python image
 FROM python:3.10-slim
 
-# Set the working directory in the container
+# Install Poetry
+RUN pip install --no-cache-dir poetry
+
+# Set working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
-
-# Install Poetry
-RUN pip install --no-cache-dir --upgrade poetry
-
-# Install dependencies using Poetry
+# Copy project files
+COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-root
 
-# Run tests
-RUN poetry run pytest
+# Copy source code
+COPY . /app
 
-# Make port 80 available to the world outside this container
-EXPOSE 80
-
-# Define environment variable
-ENV NAME=World
-
-# Run k2spicedb when the container launches
-CMD ["poetry", "run", "k2spicedb"]
+# By default, run the CLI
+ENTRYPOINT ["poetry", "run", "python", "-m", "k2spicedb.cli"]

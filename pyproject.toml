@@ -8,12 +8,13 @@ packages = [{ include = "k2spicedb", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-argparse = "^1.4.0"
-langchain = "^0.0.148"       # use an appropriate version
-openai = "^0.27.0"           # ensure you have an LLM provider library
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^6.2.2"
+langchain = "^0.0.249"
+openai = "^0.27.0"
+typer = "^0.9.0"  # for CLI
+rich = "^13.0.0"  # for CLI output styling
+concurrent.futures = "^3.0.0"  # For multithreading
+jsonschema = "^4.17.3"  # Optional: for validating Keycloak JSON
+pytest = "^7.2.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
