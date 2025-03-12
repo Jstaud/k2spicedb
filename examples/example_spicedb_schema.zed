@@ -1,0 +1,7 @@
+# Example SpiceDB schema
+
+definition user {}
+
+definition role {}
+
+definition group {}
