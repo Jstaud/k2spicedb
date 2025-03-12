@@ -73,6 +73,11 @@ class TestCLI(unittest.TestCase):
         os.makedirs(output_dir)
         ret_code = cli.main([self.tempdir, "--no-llm", "-o", output_dir, "-j", "2"])
         self.assertEqual(ret_code, 0)
+
+        print("DEBUG: Parsed realm2.json")
+        with open(input_file2, 'r', encoding='utf-8') as f:
+            print(json.load(f))  # Print the parsed input
+        
         # Check that output files for both inputs exist
         out1 = os.path.join(output_dir, "realm.zed")
         out2 = os.path.join(output_dir, "realm2.zed")
