@@ -10,10 +10,11 @@ packages = [{ include = "k2spicedb", from = "src" }]
 python = "^3.10"
 langchain = "^0.0.249"
 openai = "^0.27.0"
-typer = "^0.9.0"  # for CLI
-rich = "^13.0.0"  # for CLI output styling
-concurrent.futures = "^3.0.0"  # For multithreading
+typer = "^0.9.0"  # For CLI
+rich = "^13.0.0"  # For CLI output styling
 jsonschema = "^4.17.3"  # Optional: for validating Keycloak JSON
+
+[tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"
 
 [build-system]

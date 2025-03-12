@@ -18,11 +18,11 @@ class LLMTransformer:
     Uses a language model to transform Keycloak realm data into a SpiceDB schema.
     By default, integrates with OpenAI via LangChain.
     """
-    def __init__(self, model_name: str = "text-davinci-003", temperature: float = 0.0, 
+    def __init__(self, model_name: str = "o3-mini", temperature: float = 0.0, 
                  max_tokens: int = 1000, openai_api_key: str = None, llm=None):
         """
         Initialize the LLM transformer.
-        :param model_name: OpenAI model name (e.g., 'text-davinci-003' or 'gpt-3.5-turbo').
+        :param model_name: OpenAI model name (e.g., 'o3-mini' or 'gpt-4.5').
         :param temperature: Sampling temperature for the LLM (0.0 for deterministic output).
         :param max_tokens: Maximum tokens for the LLM output.
         :param openai_api_key: OpenAI API key (if None, will use OPENAI_API_KEY env var).
@@ -38,7 +38,7 @@ class LLMTransformer:
         else:
             # Choose appropriate LangChain LLM class based on model type (completion vs chat)
             if model_name.startswith("gpt-") or model_name.startswith("GPT-"):
-                # Use OpenAI Chat model (e.g., GPT-3.5/4)
+                # Use OpenAI Chat model (e.g., GPT-4.5)
                 self.llm = ChatOpenAI(model_name=model_name, temperature=temperature, 
                                       max_tokens=max_tokens, openai_api_key=openai_api_key)
             else:
