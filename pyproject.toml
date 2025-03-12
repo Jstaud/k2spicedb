@@ -2,13 +2,15 @@
 name = "k2spicedb"
 version = "0.1.0"
 description = "A tool to migrate Keycloak realms to SpiceDB schemas"
-authors = ["James Staud <james@example.com>"]
+authors = ["James Staud <james.staud@gmail.com>"]
 license = "MIT"
 packages = [{ include = "k2spicedb", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 argparse = "^1.4.0"
+langchain = "^0.0.148"       # use an appropriate version
+openai = "^0.27.0"           # ensure you have an LLM provider library
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^6.2.2"
