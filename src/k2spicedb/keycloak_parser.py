@@ -48,7 +48,7 @@ class KeycloakParser:
         :param file_path: Path to the Keycloak JSON file.
         :return: KeycloakRealm object with parsed data.
         """
-        logger.debug(f"Reading Keycloak realm export from file: {file_path}")
+        logger.debug("Reading Keycloak realm export from file: %s", file_path)
 
         with open(file_path, "r", encoding="utf-8") as file:
             data = json.load(file)
@@ -77,13 +77,14 @@ class KeycloakParser:
             composite_roles=composite_roles
         )
 
-        logger.info(f"Parsed realm '{realm.name}': "
-                    f"{len(realm.realm_roles)} realm roles, "
-                    f"{sum(len(roles) for roles in realm.client_roles.values())} client roles, "
-                    f"{len(realm.groups)} top-level groups.")
+        logger.info("Parsed realm '%s': %d realm roles, %d client roles, %d top-level groups.",
+                    realm.name,
+                    len(realm.realm_roles),
+                    sum(len(roles) for roles in realm.client_roles.values()),
+                    len(realm.groups))
 
         if composite_roles:
-            logger.info(f"Found {len(composite_roles)} composite role(s) in the realm export.")
+            logger.info("Found %d composite role(s) in the realm export.", len(composite_roles))
 
         return realm
 

@@ -1,0 +1,8 @@
+definition user {}
+definition group {
+    relation member: user
+}
+definition realm {
+    relation role1: user
+    relation role2: user
+}

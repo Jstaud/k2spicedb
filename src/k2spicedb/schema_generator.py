@@ -51,7 +51,12 @@ class SchemaGenerator:
         if not realm.realm_roles and not realm.client_roles and not realm.groups:
             schema_lines.insert(0, f"// Realm: {realm.name}")
 
-        return "\n".join(schema_lines)
+        # Fix: Assign schema_text before using it
+        schema_text = "\n".join(schema_lines)
+
+        logger.info("Schema generated for realm '%s':\n%s", realm.name, schema_text)
+
+        return schema_text
 
     @classmethod
     def _add_group_definition(cls, schema_lines: list, realm: KeycloakRealm):

@@ -60,11 +60,11 @@ def get_input_files(input_paths: List[str]) -> List[str]:
 def determine_output_paths(input_files: List[str], output_arg: str):
     """Determines the appropriate output path for single or multiple inputs."""
     if not output_arg:
-        # Default output naming
         if len(input_files) == 1:
             base_name = os.path.splitext(os.path.basename(input_files[0]))[0]
             return None, os.path.join(os.path.dirname(input_files[0]), f"{base_name}.zed")
-        return os.getcwd(), None  # Default to current directory for multiple files
+
+        return os.getcwd(), None  # 🔥 Ensure it does not return `None, None`
 
     if len(input_files) > 1:
         if os.path.exists(output_arg) and not os.path.isdir(output_arg):
@@ -74,24 +74,36 @@ def determine_output_paths(input_files: List[str], output_arg: str):
         os.makedirs(output_arg, exist_ok=True)
         return output_arg, None
 
-    return None, output_arg
-
+    return None, output_arg or os.path.join(os.getcwd(), "output.zed")  # 🔥 Ensure output_file is never empty
 
 def process_file(input_path: str, output_path: str, parser_obj, transformer):
     """Processes a single Keycloak export file, generating and saving the SpiceDB schema."""
     try:
-        logging.info(f"Processing: {input_path}")
+        logging.info("Processing: %s", input_path)
         realm = parser_obj.parse_file(input_path)
 
         schema_text = transformer.transform(realm) if transformer else SchemaGenerator.generate_schema(realm)
 
-        with open(output_path, "w", encoding="utf-8") as f:
+        if not schema_text.strip():
+            logging.warning("Skipping empty schema for realm '%s'", realm.name)
+            return False
+
+        if not output_path.strip():  # 🔥 Check if output_path is empty or blank
+            logging.error("Output path is empty! This should never happen.")
+            return False
+
+        abs_output_path = os.path.abspath(output_path)  # 🔥 Convert to absolute path
+        print(f"DEBUG: Writing to absolute path: {abs_output_path}")
+
+        os.makedirs(os.path.dirname(abs_output_path), exist_ok=True)  # Ensure directory exists
+
+        with open(abs_output_path, "w", encoding="utf-8") as f:
             f.write(schema_text)
 
-        logging.info(f"Schema saved: {output_path}")
+        logging.info("Schema saved: %s", abs_output_path)
         return True
     except Exception as e:
-        logging.error(f"Failed to process {input_path}: {e}")
+        logging.error("Failed to process %s: %s", input_path, e)
         return False
 
 
@@ -103,6 +115,11 @@ def main(argv: List[str] = None) -> int:
     input_files = get_input_files(args.input)
     output_dir, output_file = determine_output_paths(input_files, args.output)
 
+    print(f"DEBUG: output_dir={output_dir}, output_file={output_file}")  # 🔥 Debug print
+
+    if output_file is None and output_dir is None:
+        logging.error("Both output_dir and output_file are None. This should never happen.")
+        sys.exit(1)
     parser_obj = KeycloakParser()
     transformer = None if args.no_llm else LLMTransformer(model_name=args.model)
 
@@ -114,17 +131,24 @@ def main(argv: List[str] = None) -> int:
     if len(input_files) > 1 and args.jobs > 1:
         from concurrent.futures import ThreadPoolExecutor, as_completed
         with ThreadPoolExecutor(max_workers=min(args.jobs, len(input_files))) as executor:
-            future_to_path = {executor.submit(process_file, path, os.path.join(output_dir, os.path.basename(path) + ".zed"), parser_obj, transformer): path
-                              for path in input_files}
+            future_to_path = {
+                executor.submit(
+                    process_file,
+                    path,
+                    os.path.join(output_dir, os.path.splitext(os.path.basename(path))[0] + ".zed"),  # ✅ Corrected naming
+                    parser_obj,
+                    transformer
+                ): path for path in input_files
+            }
             results = [future.result() for future in as_completed(future_to_path)]
     else:
         for path in input_files:
-            out_path = output_file if len(input_files) == 1 else os.path.join(output_dir, os.path.basename(path) + ".zed")
+            out_path = output_file if len(input_files) == 1 else os.path.join(output_dir, os.path.splitext(os.path.basename(path))[0] + ".zed")
             results.append(process_file(path, out_path, parser_obj, transformer))
 
     success_count = sum(results)
     fail_count = len(results) - success_count
-    logging.info(f"Processing complete. Successful: {success_count}, Failed: {fail_count}.")
+    logging.info("Processing complete. Successful: %d, Failed: %d.", success_count, fail_count)
     return 0 if fail_count == 0 else 1
 
 

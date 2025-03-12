@@ -13,6 +13,20 @@ import logging
 logging.disable(logging.CRITICAL)
 
 class TestCLI(unittest.TestCase):
+    """
+    TestCLI is a unittest.TestCase class that tests the command-line interface (CLI) functionality for processing realm JSON files.
+    Methods:
+        setUp():
+            Sets up the test environment by creating a temporary directory and writing a test realm JSON file to it.
+        tearDown():
+            Cleans up the test environment by removing the temporary directory.
+        test_cli_single_no_llm():
+            Tests the CLI functionality for processing a single input file without using LLM.
+            Steps:
+        test_cli_multiple_no_llm():
+            Tests the CLI with multiple input files and the --no-llm option.
+            Steps:
+    """
     def setUp(self):
         # Create a temporary directory for input/output files
         self.tempdir = tempfile.mkdtemp()
@@ -43,6 +57,21 @@ class TestCLI(unittest.TestCase):
         shutil.rmtree(self.tempdir)
 
     def test_cli_single_no_llm(self):
+        """
+        Test the CLI functionality for processing a single input file without using LLM.
+
+        This test performs the following steps:
+        1. Creates an output file path in a temporary directory.
+        2. Runs the CLI main function with the input file and the --no-llm flag, specifying the output file.
+        3. Asserts that the CLI command returns a success code (0).
+        4. Checks that the output file is created.
+        5. Parses the input file to generate the expected schema using KeycloakParser and SchemaGenerator.
+        6. Reads the content of the output file.
+        7. Asserts that the content of the output file matches the expected schema.
+
+        Raises:
+            AssertionError: If any of the assertions fail.
+        """
         # Output file path in tempdir
         out_file = os.path.join(self.tempdir, "output.zed")
         # Run CLI main for a single input with no-llm
@@ -59,6 +88,22 @@ class TestCLI(unittest.TestCase):
         self.assertEqual(actual_schema.strip(), expected_schema.strip())
 
     def test_cli_multiple_no_llm(self):
+        """
+        Test the CLI with multiple input files and the --no-llm option.
+        This test performs the following steps:
+        1. Creates a second input file with realm data.
+        2. Writes the second input file to the temporary directory.
+        3. Runs the CLI command with the temporary directory as input and a new output directory.
+        4. Asserts that the CLI command returns a success code (0).
+        5. Prints the parsed content of the second input file for debugging purposes.
+        6. Checks that the output files for both input files exist.
+        7. Verifies that the output files contain expected content, such as realm names and user definitions.
+        Assertions:
+        - The CLI command returns a success code (0).
+        - The output files for both input files exist.
+        - The first output file contains specific roles and user definitions.
+        - The second output file contains the realm name and user definitions.
+        """
         # Create a second input file
         second_realm_data = {
             "realm": "SecondRealm",
@@ -81,10 +126,15 @@ class TestCLI(unittest.TestCase):
         # Check that output files for both inputs exist
         out1 = os.path.join(output_dir, "realm.zed")
         out2 = os.path.join(output_dir, "realm2.zed")
+        print(f"DEBUG: Test expecting output in {output_dir}")
+        print(f"DEBUG: Checking existence of {out1}")
+        print(f"DEBUG: Checking existence of {out2}")
+        print(f"DEBUG: Files in output dir: {os.listdir(output_dir) if os.path.exists(output_dir) else 'Directory not found'}")
+
         self.assertTrue(os.path.exists(out1))
         self.assertTrue(os.path.exists(out2))
         # Verify basic content in each output (e.g., the realm name appears as comment or definition context)
-        with open(out1, 'r') as f1, open(out2, 'r') as f2:
+        with open(out1, 'r', encoding='utf-8') as f1, open(out2, 'r', encoding='utf-8') as f2:
             content1 = f1.read()
             content2 = f2.read()
         self.assertIn("roleA", content1)
