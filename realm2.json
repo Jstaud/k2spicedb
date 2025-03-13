@@ -1,0 +1,40 @@
+{
+  "realm": "example2",
+  "users": [
+    {
+      "id": "1",
+      "username": "user3",
+      "email": "user3@example.com",
+      "enabled": true
+    },
+    {
+      "id": "2",
+      "username": "user4",
+      "email": "user4@example.com",
+      "enabled": true
+    }
+  ],
+  "roles": {
+    "realm": [
+      {
+        "id": "3",
+        "name": "role3"
+      },
+      {
+        "id": "4",
+        "name": "role4"
+      }
+    ],
+    "client": {}
+  },
+  "groups": [
+    {
+      "id": "4",
+      "name": "group4"
+    },
+    {
+      "id": "3",
+      "name": "group3"
+    }
+  ]
+}

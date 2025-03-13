@@ -4,10 +4,8 @@ Uses LangChain to integrate with the OpenAI API for generating SpiceDB schemas f
 """
 
 import logging
-import os
-from langchain.llms import OpenAI
-from langchain.chat_models import ChatOpenAI
-from langchain.schema import HumanMessage
+from langchain_openai import OpenAI, ChatOpenAI
+from langchain_core.messages import HumanMessage
 from k2spicedb.keycloak_parser import KeycloakRealm
 from k2spicedb.schema_generator import SchemaGenerator
 
@@ -55,15 +53,15 @@ class LLMTransformer:
         prompt_text = self._generate_prompt(realm)
 
         try:
-            logger.info(f"Generating schema for realm '{realm.name}' using model '{self.model_name}'.")
-            logger.debug(f"LLM Prompt:\n{prompt_text}")
+            logger.info("Generating schema for realm '%s' using model '%s'.", realm.name, self.model_name)
+            logger.debug("LLM Prompt:\n%s", prompt_text)
 
             schema_text = self._invoke_llm(prompt_text)
             return schema_text.strip()
 
         except Exception as e:
-            logger.error(f"LLM transformation failed for realm '{realm.name}': {e}")
-            logger.info(f"Falling back to deterministic schema generation for realm '{realm.name}'.")
+            logger.error("LLM transformation failed for realm '%s': %s", realm.name, e)
+            logger.info("Falling back to deterministic schema generation for realm '%s'.", realm.name)
             return SchemaGenerator.generate_schema(realm)
 
     def _generate_prompt(self, realm: KeycloakRealm) -> str:
