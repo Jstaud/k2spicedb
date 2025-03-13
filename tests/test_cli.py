@@ -27,6 +27,7 @@ class TestCLI(unittest.TestCase):
             Tests the CLI with multiple input files and the --no-llm option.
             Steps:
     """
+
     def setUp(self):
         # Create a temporary directory for input/output files
         self.tempdir = tempfile.mkdtemp()

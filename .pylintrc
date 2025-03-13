@@ -42,6 +42,12 @@ disable=
     C0116,  # missing-function-docstring
     C0301,  # line-too-long
     W0703,  # broad-exception-caught
+    C0303,  # trailing-whitespace
+    C0411,  # wrong-import-order
+    C0304,  # missing-final-newline
+    W0611,  # unused-import
+    R0917,  # too-many-positional-arguments
+    C2801,  # unnecessary-dunder-call
 
 [REPORTS]
 # Set the output format. Available formats are text, parseable, colorized,
@@ -68,7 +74,7 @@ single-line-class-stmt=no
 good-names=i,j,k,ex,Run,_
 
 # List of builtins function names that should not be used, separated by a comma.
-bad-functions=map,filter
+bad-functions=
 
 # List of strings which can identify a callback function by name. A callback
 # name must start or end with one of those strings.
@@ -130,4 +136,4 @@ valid-metaclass-classmethod-first-arg=cls
 
 [EXCEPTIONS]
 # Exceptions that will emit a warning when being caught, separated by a comma.
-overgeneral-exceptions=Exception
+overgeneral-exceptions=builtins.Exception

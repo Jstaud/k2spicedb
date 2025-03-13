@@ -150,7 +150,7 @@ def main(argv: List[str] = None) -> int:
     success_count = sum(results)
     fail_count = len(results) - success_count
     logging.info("Processing complete. Successful: %d, Failed: %d.", success_count, fail_count)
-    return 0 if fail_count == 0 else 1
+    return 0 if not fail_count else 1
 
 
 if __name__ == "__main__":
