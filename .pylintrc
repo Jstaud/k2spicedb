@@ -49,11 +49,6 @@ disable=
 # mypackage.mymodule.MyReporterClass.
 output-format=text
 
-# Put messages in a separate file for each module / package specified on the
-# command line instead of printing them on stdout. Reports (if any) will be
-# written in a file name "pylint_global.[txt|json]".
-files-output=no
-
 # Tells whether to display a full report or only the messages.
 reports=no
 
@@ -71,9 +66,6 @@ single-line-class-stmt=no
 [BASIC]
 # Variable names that should be ignored, separated by a comma.
 good-names=i,j,k,ex,Run,_
-
-# Argument names that should be ignored, separated by a comma.
-argument-names=_
 
 # List of builtins function names that should not be used, separated by a comma.
 bad-functions=map,filter
