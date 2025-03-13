@@ -73,9 +73,6 @@ single-line-class-stmt=no
 # Variable names that should be ignored, separated by a comma.
 good-names=i,j,k,ex,Run,_
 
-# List of builtins function names that should not be used, separated by a comma.
-bad-functions=
-
 # List of strings which can identify a callback function by name. A callback
 # name must start or end with one of those strings.
 callbacks=
