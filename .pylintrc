@@ -46,7 +46,7 @@ disable=
     C0411,  # wrong-import-order
     C0304,  # missing-final-newline
     W0611,  # unused-import
-    R0917,  # too-many-positional-arguments
+    R0913,  # too-many-arguments
     C2801,  # unnecessary-dunder-call
 
 [REPORTS]
