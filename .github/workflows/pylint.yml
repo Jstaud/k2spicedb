@@ -21,9 +21,18 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
-    - name: Analysing the code with pylint
+    - name: Run pylint
+      id: pylint
       run: |
-        poetry run pylint --rcfile=.pylintrc $(git ls-files '*.py')
+        poetry run pylint --rcfile=.pylintrc $(git ls-files '*.py') > pylint-report.txt || true
+    - name: Check pylint score
+      run: |
+        score=$(tail -n 2 pylint-report.txt | head -n 1 | grep -oP '\d+\.\d+')
+        echo "Pylint score: $score"
+        if (( $(echo "$score < 8.0" | bc -l) )); then
+          echo "Pylint score is below 8.0"
+          exit 1
+        fi
 
   test:
     runs-on: ubuntu-latest
