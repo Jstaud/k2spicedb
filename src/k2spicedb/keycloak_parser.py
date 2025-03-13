@@ -107,7 +107,8 @@ class KeycloakParser:
         Composite roles may include both realm and client roles.
         """
         composite_roles = {}
-        for role in data.get("roles", {}).get("realm", []) + sum(data.get("roles", {}).get("client", {}).values(), []):
+        for role in data.get("roles", {}).get("realm", []) + \
+                sum(data.get("roles", {}).get("client", {}).values(), []):
             if role.get("composite") and role.get("composites"):
                 components = self._extract_composite_components(role)
                 if components:

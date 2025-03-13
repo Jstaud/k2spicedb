@@ -126,4 +126,6 @@ class SchemaGenerator:
         if valid_parts:
             definition_lines.append(f"    permission {safe_composite} = " + " + ".join(valid_parts))
         else:
-            definition_lines.append(f"    // Composite role '{composite_role}' spans multiple scopes (not fully expanded)")
+            definition_lines.append(
+                f"    // Composite role '{composite_role}' spans multiple scopes (not fully expanded)"
+            )

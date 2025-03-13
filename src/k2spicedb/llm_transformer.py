@@ -4,8 +4,7 @@ Uses LangChain to integrate with the OpenAI API for generating SpiceDB schemas f
 """
 
 import logging
-from langchain_openai import OpenAI
-from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAI, ChatOpenAI
 from langchain.schema import HumanMessage
 from k2spicedb.keycloak_parser import KeycloakRealm
 from k2spicedb.schema_generator import SchemaGenerator

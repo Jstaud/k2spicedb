@@ -8,6 +8,7 @@ import sys
 import os
 import logging
 from typing import List
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from k2spicedb.keycloak_parser import KeycloakParser
 from k2spicedb.llm_transformer import LLMTransformer
@@ -76,6 +77,7 @@ def determine_output_paths(input_files: List[str], output_arg: str):
 
     return None, output_arg or os.path.join(os.getcwd(), "output.zed")  # 🔥 Ensure output_file is never empty
 
+
 def process_file(input_path: str, output_path: str, parser_obj, transformer):
     """Processes a single Keycloak export file, generating and saving the SpiceDB schema."""
     try:
@@ -129,7 +131,6 @@ def main(argv: List[str] = None) -> int:
     # Process files (sequentially or with concurrency)
     results = []
     if len(input_files) > 1 and args.jobs > 1:
-        from concurrent.futures import ThreadPoolExecutor, as_completed
         with ThreadPoolExecutor(max_workers=min(args.jobs, len(input_files))) as executor:
             future_to_path = {
                 executor.submit(

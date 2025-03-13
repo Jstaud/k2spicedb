@@ -1,3 +1,6 @@
+"""
+Setup script for k2spicedb.
+"""
 from setuptools import setup, find_packages
 
 setup(
