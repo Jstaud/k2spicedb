@@ -32,12 +32,8 @@ k2spicedb/
 ├── src/
 │   └── k2spicedb/
 │       ├── __init__.py
-│       ├── agent.py
 │       ├── cli.py
-│       ├── concurrency.py
 │       ├── llm_transformer.py
-│       ├── logging_config.py
-│       ├── output_writer.py
 │       ├── parser.py
 │       ├── prompt_handler.py
 │       ├── schema_generator.py
